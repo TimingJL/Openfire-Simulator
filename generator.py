@@ -19,7 +19,7 @@ channel = connection.channel()
 
 #task generator
 while True:
-    t = nextTime(1/4.0)
+    t = nextTime(1/0.5)
     time.sleep(t)
 
 

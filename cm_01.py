@@ -5,46 +5,55 @@ import thread
 #from threading import Time
 import numpy as np
 from collections import deque
+from threading import Thread
 
 credentials = pika.PlainCredentials('timing','ttsailab')
 connection = pika.BlockingConnection(pika.ConnectionParameters(host='104.236.113.133',port = 5672, virtual_host = 'timing', credentials = credentials))
 channel = connection.channel()
 
 queue_name = 'cm_01'
-#msg_queue = deque([])
-msg_queue = []
-#a, m = 1., 1. # shape and mode
-#task_list = []
+msg_queue = deque([])
 
 channel.queue_declare(queue=queue_name, durable=True)
 print ' [*] Waiting for messages. To exit press CTRL+C'
 
-def out(msg_queue):
-	#numpy.random.pareto
-	#http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.pareto.html
-	a, m = 1., 1. # shape and mode
-	s = np.random.pareto(a, 1) + m
-	time.sleep(s)
-	if len(msg_queue)!=0:
-		msg_queue.popleft()
-    	print 'pop'
-    	print msg_queue
+
+def out():
+    #numpy.random.pareto
+    #http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.pareto.html
+    a, m = 10., 1. # shape and mode
+    while True:        
+        s = np.random.pareto(a, 1) + m
+        time.sleep(s)
+        if msg_queue:
+            msg_queue.popleft()
+            print '\n pop' + str(s)
+            print msg_queue
 
 
 def callback(ch, method, properties, body):
     print " [x] Received %r" % (body,)
-    #time.sleep( body.count('.') )
-    #print " [x] Done"
-    #task_list.append(body)
     msg_queue.append(body)
-    #print task_list
-    print 'in queue'
+    print '\n in queue'
     print msg_queue
     ch.basic_ack(delivery_tag = method.delivery_tag)
+    #thread.start_new_thread(Threadfun, (msg_queue, 2, lock))
+
+th = Thread(target=out)
+th.start()
 
 channel.basic_qos(prefetch_count=1)
-channel.basic_consume(callback,
-                      queue=queue_name)
+channel.basic_consume(callback, queue=queue_name)
 channel.start_consuming()
 
-thread.start_new_thread(out,(msg_queue))
+
+
+
+    #thread.start_new_thread(Threadfun, (msg_queue, 2, lock))
+
+
+
+
+
+
+
