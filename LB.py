@@ -4,8 +4,8 @@ import pika
 import scheduler
 import parameter
 
-credentials = pika.PlainCredentials(parameter.username, parameter.password)
-connection = pika.BlockingConnection(pika.ConnectionParameters(host=parameter.host,port = 5672, virtual_host = parameter.vhost, credentials = credentials))
+credentials = pika.PlainCredentials(parameter.rabbitmq_username, parameter.rabbitmq_password)
+connection = pika.BlockingConnection(pika.ConnectionParameters(host=parameter.rabbitmq_host,port = 5672, virtual_host = parameter.rabbitmq_vhost, credentials = credentials))
 channel = connection.channel()
 
 #cm_list = ['cm_01','cm_02','cm_03']

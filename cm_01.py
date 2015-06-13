@@ -8,8 +8,8 @@ from collections import deque
 from threading import Thread
 import parameter
 
-credentials = pika.PlainCredentials(parameter.username, parameter.password)
-connection = pika.BlockingConnection(pika.ConnectionParameters(host=parameter.host,port = 5672, virtual_host = parameter.vhost, credentials = credentials))
+credentials = pika.PlainCredentials(parameter.rabbitmq_username, parameter.rabbitmq_password)
+connection = pika.BlockingConnection(pika.ConnectionParameters(host=parameter.rabbitmq_host,port = 5672, virtual_host = parameter.rabbitmq_vhost, credentials = credentials))
 channel = connection.channel()
 
 queue_name = 'cm_01'
