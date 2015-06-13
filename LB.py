@@ -2,9 +2,10 @@
 #coding=utf-8
 import pika
 import scheduler
+import parameter
 
-credentials = pika.PlainCredentials('timing','ttsailab')
-connection = pika.BlockingConnection(pika.ConnectionParameters(host='104.236.113.133',port = 5672, virtual_host = 'timing', credentials = credentials))
+credentials = pika.PlainCredentials(parameter.username, parameter.password)
+connection = pika.BlockingConnection(pika.ConnectionParameters(host=parameter.host,port = 5672, virtual_host = parameter.vhost, credentials = credentials))
 channel = connection.channel()
 
 #cm_list = ['cm_01','cm_02','cm_03']

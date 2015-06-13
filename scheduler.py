@@ -3,12 +3,13 @@
 import pika
 import sys
 import random
+import parameter
 
-credentials = pika.PlainCredentials('timing','ttsailab')
-connection = pika.BlockingConnection(pika.ConnectionParameters(host='104.236.113.133',port = 5672, virtual_host = 'timing', credentials = credentials))
+credentials = pika.PlainCredentials(parameter.username, parameter.password)
+connection = pika.BlockingConnection(pika.ConnectionParameters(host=parameter.host,port = 5672, virtual_host = parameter.vhost, credentials = credentials))
 channel = connection.channel()
 
-def mRR(task):
+def mRR(task, cm_list):
     #print " [x] Received %r" % (task,)
     channel.queue_declare(queue='task_queue', durable=True)
     channel.basic_publish(exchange='',

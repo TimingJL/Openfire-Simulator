@@ -6,9 +6,10 @@ import thread
 import numpy as np
 from collections import deque
 from threading import Thread
+import parameter
 
-credentials = pika.PlainCredentials('timing','ttsailab')
-connection = pika.BlockingConnection(pika.ConnectionParameters(host='104.236.113.133',port = 5672, virtual_host = 'timing', credentials = credentials))
+credentials = pika.PlainCredentials(parameter.username, parameter.password)
+connection = pika.BlockingConnection(pika.ConnectionParameters(host=parameter.host,port = 5672, virtual_host = parameter.vhost, credentials = credentials))
 channel = connection.channel()
 
 queue_name = 'cm_01'
@@ -45,11 +46,6 @@ th.start()
 channel.basic_qos(prefetch_count=1)
 channel.basic_consume(callback, queue=queue_name)
 channel.start_consuming()
-
-
-
-
-    #thread.start_new_thread(Threadfun, (msg_queue, 2, lock))
 
 
 
